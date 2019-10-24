@@ -1,10 +1,12 @@
 require("dotenv").config();
 
+var fs = require('fs');
 var keys = require("./keys.js");
 var axios = require('axios');
 var moment = require('moment');
+var Spotify = require('node-spotify-api');
 
-// var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 var searchType = process.argv[2];
 var userSearch = process.argv[3];
 
@@ -13,7 +15,7 @@ switch (searchType) {
         getTourDates();
     break;
     case 'spotify-this-song':
-
+        getThisSong();
     break;
     case 'movie-this':
         getMovies();
@@ -57,12 +59,27 @@ function getMovies() {
         var plot = movieInfo.Plot;
         var actors = movieInfo.Actors;
         console.log(title);
-        console.log(releaseYear);
-        console.log(imdbRating);
-        console.log(rotten + ': ' + rottenRating);
-        console.log(country);
-        console.log(lang);
-        console.log(plot);
-        console.log(actors);
+        console.log('Released in ' + releaseYear);
+        console.log('IMDB rating of ' + imdbRating);
+        console.log(rotten + ' Rating: ' + rottenRating);
+        console.log('Produced in ' + country);
+        console.log('Language: ' + lang);
+        console.log('Plot summary: ' + plot);
+        console.log('Cast: ' + actors);
     })
+}
+
+function getThisSong() {
+    spotify.search({ 
+        type: 'track', 
+        query: userSearch 
+    }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+      console.log("Artist: " + data.tracks.items[0].artists[0].name); 
+      console.log("Song Name: " + data.tracks.items[0].name); 
+      console.log("Preview: " + data.tracks.items[0].preview_url); 
+      console.log("Album: " + data.tracks.items[0].album.name); 
+      });
 }
