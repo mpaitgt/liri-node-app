@@ -36,9 +36,9 @@ function getTourDates(band) {
             var state = tourInfo[i].venue.region;
             var country = tourInfo[i].venue.country;
             if (state === '') {
-                console.log(`${date} at ${time} - ${venue} in ${city}, ${country}`);
+                myLog(`${date} at ${time} - ${venue} in ${city}, ${country}`);
             } else {
-                console.log(`${date} at ${time} - ${venue} in ${city}, ${state}`);
+                myLog(`${date} at ${time} - ${venue} in ${city}, ${state}`); 
             }
         }
     })
@@ -48,14 +48,17 @@ function getMovies(movie) {
     var omdbURL = 'http://www.omdbapi.com/?apikey=trilogy&t=' + movie;
     axios.get(omdbURL).then(function(response) {
         var movieInfo = response.data;
-        console.log(movieInfo.Title);
-        console.log('Released in ' + movieInfo.Year);
-        console.log('IMDB rating of ' + movieInfo.imdbRating);
-        console.log(movieInfo.Ratings[1].Source + ' Rating: ' + movieInfo.Ratings[1].Value);
-        console.log('Produced in ' + movieInfo.Country);
-        console.log('Language: ' + movieInfo.Language);
-        console.log('Plot summary: ' + movieInfo.Plot);
-        console.log('Cast: ' + movieInfo.Actors);
+        var title = movieInfo.Title;
+        var year = movieInfo.Year;
+        var imdbRating = movieInfo.imdbRating;
+        var rotten = movieInfo.Ratings[1].Source;
+        var rottenRating = movieInfo.Ratings[1].Value;
+        var country = movieInfo.Country;
+        var lang = movieInfo.Language
+        var plot = movieInfo.Plot
+        var actors = movieInfo.Actors;
+
+        myLog(`${title}\nReleased in ${year}\nIMDB rating of ${imdbRating}\n${rotten} Rating: ${rottenRating}\nProduced in ${country}\nLanguage: ${lang}\nPlot summary: ${plot}\nCast: ${actors}`)
     })
 }
 
@@ -69,10 +72,11 @@ function getThisSong(song) {
         }
         var spotifyReturn = data.tracks.items;
         for (var i = 0; i < spotifyReturn.length; i++) {
-            console.log("Artist: " + data.tracks.items[i].artists[0].name); 
-            console.log("Song Name: " + data.tracks.items[i].name); 
-            console.log("Preview: " + data.tracks.items[i].preview_url); 
-            console.log("Album: " +data.tracks.items[i].album.name); 
+            var artist = data.tracks.items[i].artists[0].name;
+            var song = data.tracks.items[i].name;
+            var preview = data.tracks.items[i].preview_url;
+            var album = data.tracks.items[i].album.name;
+            myLog(`Artist: ${artist}\nSong Name: \n${song}\nPreview: ${preview}\nAlbum: ${album}`); 
             console.log('-----------------------------------------------------');
         }
       });
@@ -98,5 +102,14 @@ function doThis() {
                 getMovies(newInput);
             break;
         }
+    })
+}
+
+function myLog(message) {
+    console.log(message);
+    fs.appendFile('log.txt', `\n${message}`, function(err) {
+        if (err) {
+            return console.log(err);
+          }
     })
 }
