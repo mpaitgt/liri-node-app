@@ -24,10 +24,11 @@ switch (searchType) {
     break;
 }
 
-function getTourDates(band) {
-    var bandsInTownURL = 'https://rest.bandsintown.com/artists/' + band + '/events?app_id=codingbootcamp';
+function getTourDates(input) {
+    var bandsInTownURL = 'https://rest.bandsintown.com/artists/' + input + '/events?app_id=codingbootcamp';
     axios.get(bandsInTownURL).then(function(response) {
         var tourInfo = response.data;
+        myLog(`\n${searchType}`);
         for (var i = 0; i < tourInfo.length; i++) {
             var date = moment(tourInfo[i].datetime).format('MM/DD/YYYY');
             var time = moment(tourInfo[i].datetime).format('h:MM a');
@@ -44,8 +45,8 @@ function getTourDates(band) {
     })
 }
 
-function getMovies(movie) {
-    var omdbURL = 'http://www.omdbapi.com/?apikey=trilogy&t=' + movie;
+function getMovies(input) {
+    var omdbURL = 'http://www.omdbapi.com/?apikey=trilogy&t=' + input;
     axios.get(omdbURL).then(function(response) {
         var movieInfo = response.data;
         var title = movieInfo.Title;
@@ -57,27 +58,27 @@ function getMovies(movie) {
         var lang = movieInfo.Language
         var plot = movieInfo.Plot
         var actors = movieInfo.Actors;
-
-        myLog(`${title}\nReleased in ${year}\nIMDB rating of ${imdbRating}\n${rotten} Rating: ${rottenRating}\nProduced in ${country}\nLanguage: ${lang}\nPlot summary: ${plot}\nCast: ${actors}`)
+        myLog(`\n${searchType}`);
+        myLog(`${title}\nReleased in ${year}\nIMDB rating of ${imdbRating}\n${rotten} Rating: ${rottenRating}\nProduced in ${country}\nLanguage: ${lang}\nPlot summary: ${plot}\nCast: ${actors}`);
     })
 }
 
-function getThisSong(song) {
+function getThisSong(input) {
     spotify.search({ 
         type: 'track', 
-        query: song 
+        query: input 
     }, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
         }
         var spotifyReturn = data.tracks.items;
-        for (var i = 0; i < spotifyReturn.length; i++) {
+        myLog(`\n${searchType}`);
+        for (var i = 0; i < 5; i++) {
             var artist = data.tracks.items[i].artists[0].name;
             var song = data.tracks.items[i].name;
             var preview = data.tracks.items[i].preview_url;
             var album = data.tracks.items[i].album.name;
-            myLog(`Artist: ${artist}\nSong Name: \n${song}\nPreview: ${preview}\nAlbum: ${album}`); 
-            console.log('-----------------------------------------------------');
+            myLog(`Artist: ${artist}\nSong Name: ${song}\nPreview: ${preview}\nAlbum: ${album}\n---------------------------------------------------\n`);
         }
       });
 }
@@ -107,9 +108,9 @@ function doThis() {
 
 function myLog(message) {
     console.log(message);
-    fs.appendFile('log.txt', `\n${message}`, function(err) {
+    fs.appendFile('log.txt', `${message}\n`, function(err) {
         if (err) {
             return console.log(err);
-          }
+        }
     })
 }
