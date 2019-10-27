@@ -1,15 +1,14 @@
 # LIRI - NODE APP
 
 ## Description
-Liri is a command line application which allows users to query movies, concert dates, and songs.
+Liri is a command line application which allows users to query movies, concert dates, and songs. 
 
-
-## Link to the live game
-![](LIRI-GIF.gif)
+## Checkout LIRI in action below:
+![](liri-gif-node.gif)
 
 
 ## Technologies Used
-- Javascript
+- Node and NPM
 - APIs
     - Spotify-Node-API
     - Bands in town API
